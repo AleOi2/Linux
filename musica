@@ -1,0 +1,53 @@
+#!/bin/bash
+# sed -i '1,1d' Playlist.m3u  1,1d comando sed que fala para remover da 1 a 1 linha -i fala para modificar
+# sed -i y/x/z/ Playlist.m3u  Troca tadas expressões com x para z do arquivo Playlist.m3u. Colocar / sí se for um caracter e nao um comando
+# sed -i '/^#d' Playlist.m3u Elimina a expressão # do começo
+# sed -i '/^$/d' Playlist.m3u Elimina os espaços em brancos do arquivo porque ela começa e termina sem nenhum caracter
+# sed -i 's/^$/Branco/' Playlist.m3u Substitui os espaços em brancos do arquivo porque ela começa e termina sem nenhum caracter
+# sed -i 's/fabio/ana/g' Playlist.m3u Substitui todos (comando g) os fabios por ana
+
+tarefa=$1
+case $tarefa in
+
+1)
+    echo "Gerador de Playlist"
+    #Verifica se exit PlayList.txt
+    if [ -e "$Musicas" ]; then
+        echo "O diretorio Musica nao existe"
+        mkdir Musicas
+        echo "Agora o diretorio Musica foi criado"
+        echo "Coloque suas musicas aqui"
+    fi
+    #Verifica se exit PlayList.txt
+    if [ -z "PlayList.txt" ]; then
+        echo "O arquivo nao existe"
+        touch PlayList.txt
+        echo "Agora o arquivo foi criado"
+    fi
+    #Cria PlayList.m3u com as musicas em PlayList.txt
+    caminho=`echo $PWD/Musicas`
+    ls -w 1 ./Musicas/*.mp3 > ./PlayList.txt
+    sed -i "s|.\/Musicas|$caminho|g" PlayList.txt 
+    cat PlayList.txt > ./PlayList.m3u
+    mpg123 -v -C -Z --list ./PlayList.m3u
+;;
+
+*)
+    echo "oi"
+    if [ -e "$Musicas" ]; then
+        echo "O diretorio Musica nao existe"
+        mkdir Musicas
+        echo "Agora o diretorio Musica foi criado"
+        echo "Coloque suas musicas aqui"
+        exit
+    fi
+    #Verifica se exit PlayList.txt
+    if [ -z "PlayList.txt" ]; then
+        echo "O arquivo nao existe"
+        touch PlayList.txt
+        echo "Agora o arquivo foi criado"
+        exit
+    fi
+    mpg123 -v -C -Z --list ./PlayList.m3u;;
+esac
+   
