@@ -11,7 +11,7 @@ case $tarefa in
 
 1)
     echo "Gerador de Playlist"
-    #Verifica se exit PlayList.txt
+    #Verifica se exit diretorio Musicas
     if [ -e "$Musicas" ]; then
         echo "O diretorio Musica nao existe"
         mkdir Musicas
@@ -29,11 +29,12 @@ case $tarefa in
     ls -w 1 ./Musicas/*.mp3 > ./PlayList.txt
     sed -i "s|.\/Musicas|$caminho|g" PlayList.txt 
     cat PlayList.txt > ./PlayList.m3u
+    # Toca musica
     mpg123 -v -C -Z --list ./PlayList.m3u
 ;;
 
 *)
-    echo "oi"
+    #Verifica se exit diretorio Musicas
     if [ -e "$Musicas" ]; then
         echo "O diretorio Musica nao existe"
         mkdir Musicas
@@ -48,6 +49,7 @@ case $tarefa in
         echo "Agora o arquivo foi criado"
         exit
     fi
+    # Toca musica
     mpg123 -v -C -Z --list ./PlayList.m3u;;
 esac
    
