@@ -6,11 +6,8 @@
 # sed -i 's/^$/Branco/' Playlist.m3u Substitui os espaços em brancos do arquivo porque ela começa e termina sem nenhum caracter
 # sed -i 's/fabio/ana/g' Playlist.m3u Substitui todos (comando g) os fabios por ana
 
-tarefa=$1
-case $tarefa in
-
-1)
-    echo "Gerador de Playlist"
+function Verifica()
+{
     #Verifica se exit diretorio Musicas
     if [ -e "$Musicas" ]; then
         echo "O diretorio Musica nao existe"
@@ -24,6 +21,14 @@ case $tarefa in
         touch PlayList.txt
         echo "Agora o arquivo foi criado"
     fi
+}
+
+tarefa=$1
+case $tarefa in
+
+1)
+    echo "Gerador de Playlist"
+    Verifica
     #Cria PlayList.m3u com as musicas em PlayList.txt
     caminho=`echo $PWD/Musicas`
     ls -w 1 ./Musicas/*.mp3 > ./PlayList.txt
@@ -34,21 +39,7 @@ case $tarefa in
 ;;
 
 *)
-    #Verifica se exit diretorio Musicas
-    if [ -e "$Musicas" ]; then
-        echo "O diretorio Musica nao existe"
-        mkdir Musicas
-        echo "Agora o diretorio Musica foi criado"
-        echo "Coloque suas musicas aqui"
-        exit
-    fi
-    #Verifica se exit PlayList.txt
-    if [ -z "PlayList.txt" ]; then
-        echo "O arquivo nao existe"
-        touch PlayList.txt
-        echo "Agora o arquivo foi criado"
-        exit
-    fi
+    Verifica
     # Toca musica
     mpg123 -v -C -Z --list ./PlayList.m3u;;
 esac
