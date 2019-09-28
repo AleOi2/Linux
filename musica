@@ -9,16 +9,17 @@
 function Verifica()
 {
     #Verifica se exit diretorio Musicas
-    if [ -e "$Musicas" ]; then
+    if [ -e $($1) ]; then
         echo "O diretorio Musica nao existe"
-        mkdir Musicas
+        mkdir $1
         echo "Agora o diretorio Musica foi criado"
         echo "Coloque suas musicas aqui"
     fi
+    echo $2
     #Verifica se exit PlayList.txt
-    if [ -z "PlayList.txt" ]; then
+    if [ -z $2 ]; then
         echo "O arquivo nao existe"
-        touch PlayList.txt
+        touch $2
         echo "Agora o arquivo foi criado"
     fi
 }
@@ -28,7 +29,7 @@ case $tarefa in
 
 1)
     echo "Gerador de Playlist"
-    Verifica
+    Verifica "$Musicas" "PlayList.txt"
     #Cria PlayList.m3u com as musicas em PlayList.txt
     caminho=`echo $PWD/Musicas`
     ls -w 1 ./Musicas/*.mp3 > ./PlayList.txt
@@ -39,7 +40,11 @@ case $tarefa in
 ;;
 
 *)
-    Verifica
+    Verifica "Lista" "PlayList.txt"
+    caminho=`echo $PWD/Lista`
+    ls -w 1 ./Lista/*.mp3 > ./PlayList.txt
+    sed -i "s|.\/Lista|$caminho|g" PlayList.txt 
+    cat PlayList.txt > ./PlayList.m3u
     # Toca musica
     mpg123 -v -C -Z --list ./PlayList.m3u;;
 esac
